@@ -6,16 +6,18 @@ export function Memory() {
   // cantidad de páginas: 6            
   // lista de peticiones: 1, 2, 1, 3, 4, 3, 5, 6, 2
 
-  const [numInputs, setNumInputs] = useState(3);
-  const [pageNumbers, setPageNumbers] = useState(Array(numInputs).fill(''));
-  const inputRefs = useRef(Array(numInputs).fill(null));
+  const [pages, setPages] = useState(0);
+  const [frames, setFrames] = useState(0);
 
-  function handleChange(index, event) {
+  const [pageNumbers, setPageNumbers] = useState(['']);
+  const inputRefs = useRef([null]);
+
+  const handleChange = (index, event) => {
     const { value } = event.target;
 
     if(value === ' ') return;
 
-    if(value.at(-1) === ' ' && index < numInputs - 1)
+    if(value.at(-1) === ' ' && index < pageNumbers.length - 1)
       inputRefs.current[index + 1].focus();
     
     const isOnlyDigits = /^\d*$/.test(value);
@@ -28,22 +30,25 @@ export function Memory() {
     });
   }
 
-  function handleKeyDown(index, event) {
+  const handleKeyDown = (index, event) => {
+    console.log(inputRefs.current.length, pageNumbers.length)
     if (event.key === 'Backspace' && !pageNumbers[index] && index > 0) {
       event.preventDefault();
-      setNumInputs((prevNumInputs) => prevNumInputs - 1);
-      setPageNumbers((prevPages) => (prevPages.pop(), prevPages));
+      setPageNumbers((prevPages) => {
+        const newPages = [...prevPages];
+        newPages.pop();
+        return newPages;
+      });
       inputRefs.current.pop();
       inputRefs.current[index - 1].focus();
     }
     if (event.key === ' ' && event.target.value) {
-      setNumInputs((prevNumInputs) => prevNumInputs + 1);
       setPageNumbers((prevPages) => [...prevPages, '']);
       inputRefs.current.push(null);
     }
   }
 
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const code = pageNumbers.join('').replace(/\s/g, '');
     console.log('El código ingresado es:', code);
@@ -54,10 +59,11 @@ export function Memory() {
       <header>
         <h1>Memory!</h1>
         <form onSubmit={handleSubmit}>
-          <label>Por favor ingresa el código que te enviamos:</label>
+          <label>Ingresá la lista de peticiones de memoria:</label>
           <div className="otp-input">
             {pageNumbers.map((digit, index) => (
               <input
+                disabled={pages !== 0 && frames !== 0 ? false : true}
                 key={index}
                 type="text"
                 value={digit}
