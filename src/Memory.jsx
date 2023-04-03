@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState } from 'react';
 
 export function Memory() {
 
@@ -10,11 +10,15 @@ export function Memory() {
   const [otp, setOtp] = useState(Array(numInputs).fill(''));
   const inputRefs = useRef(Array(numInputs).fill(null));
 
-
-
   function handleChange(index, event) {
-    const value = event.target.value;
-    const isOnlyDigits = /^\d+$/.test(value)
+    const { value } = event.target;
+
+    if(value === ' ') return;
+
+    if(value.at(-1) === ' ' && index < numInputs - 1)
+      inputRefs.current[index + 1].focus();
+
+    const isOnlyDigits = /^\d+$/.test(value);
 
     if(!isOnlyDigits) return;
 
@@ -23,12 +27,6 @@ export function Memory() {
       newOtp[index] = value;
       return newOtp;
     });
-    if (value && index < numInputs - 1) {
-      inputRefs.current[index + 1].focus();
-    }
-    if (value === ' ' && index < numInputs - 1) {
-      inputRefs.current[index + 1].focus();
-    }
   }
 
   function handleKeyDown(index, event) {
@@ -38,14 +36,7 @@ export function Memory() {
       inputRefs.current.pop();
       inputRefs.current[index - 1].focus();
     }
-    if(event.key === ' ' && event.target.value !== '') {
-      console.log(`Agregando nuevo campo...[${event.target.value}] en [${index}]`);
-      handleAddInput(index);
-    }
-  }
-
-  function handleAddInput(index) {
-    if ( /* index === numInputs - 1 */ true) {
+    if (event.key === ' ' && event.target.value) {
       setNumInputs((prevNumInputs) => prevNumInputs + 1);
       setOtp((prevOtp) => [...prevOtp, '']);
       inputRefs.current.push(null);
@@ -66,14 +57,13 @@ export function Memory() {
         <form onSubmit={handleSubmit}>
           <label>Por favor ingresa el código que te enviamos:</label>
           <div className="otp-input">
-            {otp.slice(0, numInputs).map((digit, index) => (
+            {otp.map((digit, index) => (
               <input
                 key={index}
                 type="text"
                 value={digit}
                 onChange={(event) => handleChange(index, event)}
                 onKeyDown={(event) => handleKeyDown(index, event)}
-                //onFocus={() => handleAddInput(index)}
                 ref={(el) => (inputRefs.current[index] = el)}
               />
             ))}
@@ -82,6 +72,5 @@ export function Memory() {
         </form>
       </header>
     </section>
-    
   );
 }
