@@ -48,12 +48,6 @@ export function Memory() {
     }
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const code = pageNumbers.join('').replace(/\s/g, '');
-    console.log('El código ingresado es:', code);
-  }
-
   const handleChangePageInput = (event) => {
     const { value } = event.target;
     
@@ -72,6 +66,29 @@ export function Memory() {
     setFrames(value);
   }
 
+  const handleError = () => {
+    const badPages = [];
+
+    for (const page of pageNumbers) {
+      if (~~page > pages) {
+        badPages.push(page);
+      }
+    }
+
+    return (
+      <div style={{color: 'red'}}>
+        {
+          badPages.map(p => <p>La página {p} está fuera de rango.</p>)
+        }
+      </div>
+    );
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('El código ingresado es:', pageNumbers);
+  }
+
   return (
     <section>
       <header>
@@ -84,7 +101,7 @@ export function Memory() {
           <input onChange={handleChangeFrameInput} type="text" value={frames} />
           <br />
           <label>Ingresá la lista de peticiones de memoria:</label>
-          <div className="otp-input">
+          <div className="pages-numbers-inputs-container">
             {pageNumbers.map((digit, index) => (
               <input
                 disabled={pages && frames ? false : true}
@@ -96,8 +113,9 @@ export function Memory() {
                 ref={(el) => (inputRefs.current[index] = el)}
               />
             ))}
+            {handleError()}
           </div>
-          <button type="submit">Enviar</button>
+          <button type="submit">Calcular</button>
         </form>
       </header>
     </section>
