@@ -6,8 +6,8 @@ export function Memory() {
   // cantidad de páginas: 6            
   // lista de peticiones: 1, 2, 1, 3, 4, 3, 5, 6, 2
 
-  const [pages, setPages] = useState(0);
-  const [frames, setFrames] = useState(0);
+  const [pages, setPages] = useState('');
+  const [frames, setFrames] = useState('');
 
   const [pageNumbers, setPageNumbers] = useState(['']);
   const inputRefs = useRef([null]);
@@ -54,16 +54,40 @@ export function Memory() {
     console.log('El código ingresado es:', code);
   }
 
+  const handleChangePageInput = (event) => {
+    const { value } = event.target;
+    
+    const isOnlyDigits = /^\d*$/.test(value);
+    if(!isOnlyDigits) return;
+    
+    setPages(value);
+  }
+
+  const handleChangeFrameInput = (event) => {
+    const { value } = event.target;
+    
+    const isOnlyDigits = /^\d*$/.test(value);
+    if(!isOnlyDigits) return;
+    
+    setFrames(value);
+  }
+
   return (
     <section>
       <header>
         <h1>Memory!</h1>
         <form onSubmit={handleSubmit}>
+          <label>Cantidad de páginas:</label>
+          <input onChange={handleChangePageInput} type="text" value={pages} />
+          <br />
+          <label>Cantidad de marcos de página (frames):</label>
+          <input onChange={handleChangeFrameInput} type="text" value={frames} />
+          <br />
           <label>Ingresá la lista de peticiones de memoria:</label>
           <div className="otp-input">
             {pageNumbers.map((digit, index) => (
               <input
-                disabled={pages !== 0 && frames !== 0 ? false : true}
+                disabled={pages && frames ? false : true}
                 key={index}
                 type="text"
                 value={digit}
