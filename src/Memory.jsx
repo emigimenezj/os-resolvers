@@ -55,6 +55,7 @@ export function Memory() {
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
     
+    setTable({ memory: [[]], replaceOrder: [[]] });
     setPages(value);
   }
 
@@ -64,6 +65,7 @@ export function Memory() {
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
     
+    setTable({ memory: [[]], replaceOrder: [[]] });
     setFrames(value);
   }
 
@@ -125,7 +127,7 @@ export function Memory() {
       hits++;
       return {memory, replaceOrder}
 
-    }, table);
+    }, { memory: [[]], replaceOrder: [[]] });
 
     setTable(newTable);
   }
@@ -164,7 +166,40 @@ export function Memory() {
         </form>
       </header>
       <main>
-        
+        <table>
+          <thead>
+            <tr>
+              <th>Petición</th>
+              <th>Memoria</th>
+              <th>Orden de reemplazo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {table.memory.length !== 1 ?
+              table.memory.map((memState, i) => {
+                if (!i) {
+                  return (
+                    <tr key={i}>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  );
+                } else {
+                  return (
+                    <tr key={i}>
+                      <td>{memoryRequestSequence[i-1]}</td>
+                      <td>{...memState}</td>
+                      <td>{...table.replaceOrder[i]}</td>
+                    </tr>
+                  );
+                }
+              })
+              : null
+            }
+          </tbody>
+        </table>
       </main>
     </section>
   );
