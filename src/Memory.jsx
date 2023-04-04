@@ -176,25 +176,14 @@ export function Memory() {
           </thead>
           <tbody>
             {table.memory.length !== 1 ?
-              table.memory.map((memState, i) => {
-                if (!i) {
-                  return (
-                    <tr key={i}>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  );
-                } else {
-                  return (
-                    <tr key={i}>
-                      <td>{memoryRequestSequence[i-1]}</td>
-                      <td>{...memState}</td>
-                      <td>{...table.replaceOrder[i]}</td>
-                    </tr>
-                  );
-                }
+              memoryRequestSequence.map((page, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{page}</td>
+                    <td>{...table.memory[i+1]}</td>
+                    <td>{...table.replaceOrder[i+1]}</td>
+                  </tr>
+                );
               })
               : null
             }
