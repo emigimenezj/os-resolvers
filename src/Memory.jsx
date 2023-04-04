@@ -9,21 +9,23 @@ export function Memory() {
   const [pages, setPages] = useState('');
   const [frames, setFrames] = useState('');
 
-  const [pageNumbers, setPageNumbers] = useState(['']);
+  const [memoryRequestSequence, setMemoryRequestSequence] = useState(['']);
   const inputRefs = useRef([null]);
+
+  const [table, setTable] = useState({ memory: [[]], replaceOrder: [[]] });
 
   const handleChange = (index, event) => {
     const { value } = event.target;
 
     if(value === ' ') return;
 
-    if(value.at(-1) === ' ' && index < pageNumbers.length - 1)
+    if(value.at(-1) === ' ' && index < memoryRequestSequence.length - 1)
       inputRefs.current[index + 1].focus();
     
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
 
-    setPageNumbers((prevPages) => {
+    setMemoryRequestSequence((prevPages) => {
       const newPages = [...prevPages];
       newPages[index] = value;
       return newPages;
@@ -31,10 +33,9 @@ export function Memory() {
   }
 
   const handleKeyDown = (index, event) => {
-    console.log(inputRefs.current.length, pageNumbers.length)
-    if (event.key === 'Backspace' && !pageNumbers[index] && index > 0) {
+    if (event.key === 'Backspace' && !memoryRequestSequence[index] && index > 0) {
       event.preventDefault();
-      setPageNumbers((prevPages) => {
+      setMemoryRequestSequence((prevPages) => {
         const newPages = [...prevPages];
         newPages.pop();
         return newPages;
@@ -43,7 +44,7 @@ export function Memory() {
       inputRefs.current[index - 1].focus();
     }
     if (event.key === ' ' && event.target.value) {
-      setPageNumbers((prevPages) => [...prevPages, '']);
+      setMemoryRequestSequence((prevPages) => [...prevPages, '']);
       inputRefs.current.push(null);
     }
   }
@@ -69,7 +70,7 @@ export function Memory() {
   const handleError = () => {
     const badPages = [];
 
-    for (const page of pageNumbers) {
+    for (const page of memoryRequestSequence) {
       if (~~page > pages) {
         badPages.push(page);
       }
@@ -78,7 +79,7 @@ export function Memory() {
     return (
       <div style={{color: 'red'}}>
         {
-          badPages.map(p => <p>La página {p} está fuera de rango.</p>)
+          badPages.map((p, i) => <p key={i}>La página {p} está fuera de rango.</p>)
         }
       </div>
     );
@@ -86,7 +87,47 @@ export function Memory() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('El código ingresado es:', pageNumbers);
+
+    console.log(memoryRequestSequence)
+
+    let misses = 0;
+    let hits = 0;
+
+    const newTable = memoryRequestSequence.reduce(({memory, replaceOrder}, page, i) => {
+
+      const mem = [...memory[i]];
+      const order = [...replaceOrder[i]];
+
+      if (!mem.includes(page)) {
+        if (mem.length < frames) {
+          const newMem = [...mem, page];
+          const newOrder = [...order, page];
+          misses++;
+          memory.push(newMem);
+          replaceOrder.push(newOrder);
+          return {memory, replaceOrder}
+        } else {
+          const [pageToReplace] = order;
+          const pageIndexToReplace = mem.findIndex(page => page === pageToReplace);
+
+          mem.splice(pageIndexToReplace, 1, page);
+          order.shift();
+          order.push(page);
+
+          memory.push(mem);
+          replaceOrder.push(order);
+          return {memory, replaceOrder}
+        }
+      }
+
+      memory.push(mem);
+      replaceOrder.push(order);
+      hits++;
+      return {memory, replaceOrder}
+
+    }, table);
+
+    setTable(newTable);
   }
 
   return (
@@ -102,9 +143,9 @@ export function Memory() {
           <br />
           <label>Ingresá la lista de peticiones de memoria:</label>
           <div className="pages-numbers-inputs-container">
-            {pageNumbers.map((digit, index) => (
+            {memoryRequestSequence.map((digit, index) => (
               <input
-                disabled={pages && frames ? false : true}
+                disabled={!pages || !frames}
                 key={index}
                 type="text"
                 value={digit}
@@ -115,9 +156,16 @@ export function Memory() {
             ))}
             {handleError()}
           </div>
-          <button type="submit">Calcular</button>
+          <button 
+            disabled={!pages || !frames || memoryRequestSequence.some(p => ~~p < 1 || ~~p > pages)}
+            type="submit">
+              Calcular
+          </button>
         </form>
       </header>
+      <main>
+        
+      </main>
     </section>
   );
 }
