@@ -22,7 +22,7 @@ export function RequestListInput({
 
     setMemoryRequestSequence((prevPages) => {
       const newPages = [...prevPages];
-      newPages[index] = value;
+      newPages[index] = value ? parseInt(value, 10) : value;
       return newPages;
     });
   }
@@ -30,29 +30,33 @@ export function RequestListInput({
   const handleKeyDown = (index, event) => {
     if (event.key === 'Backspace' && !memoryRequestSequence[index] && index > 0) {
       event.preventDefault();
+      inputRefs.current.pop();
+      inputRefs.current[index - 1].focus();
       setMemoryRequestSequence((prevPages) => {
         const newPages = [...prevPages];
         newPages.pop();
         return newPages;
       });
-      inputRefs.current.pop();
-      inputRefs.current[index - 1].focus();
+      return;
     }
-    console.log(event.target.value);
     if (event.key === ' ' && event.target.value) {
       setMemoryRequestSequence((prevPages) => [...prevPages, '']);
       inputRefs.current.push(null);
     }
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      inputRefs.current[Math.max(0, index-1)].focus();
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      const maxIndex = inputRefs.current.length-1;
+      console.log(inputRefs);
+      inputRefs.current[Math.min(maxIndex, index+1)].focus();
+    }
   }
 
   const handleError = () => {
-    const badPages = [];
-
-    for (const page of memoryRequestSequence) {
-      if (~~page > pages) {
-        badPages.push(page);
-      }
-    }
+    const badPages = memoryRequestSequence.filter(page => page > pages);
 
     return (
       <div style={{color: 'red'}}>
@@ -67,12 +71,12 @@ export function RequestListInput({
     <>
       <label>Ingresá la lista de peticiones de memoria:</label>
       <div className="pages-numbers-inputs-container">
-        {memoryRequestSequence.map((digit, index) => (
+        {memoryRequestSequence.map((page, index) => (
           <input
             disabled={!pages || !frames}
             key={index}
             type="text"
-            value={digit}
+            value={page}
             onChange={(event) => handleChange(index, event)}
             onKeyDown={(event) => handleKeyDown(index, event)}
             ref={(el) => (inputRefs.current[index] = el)}

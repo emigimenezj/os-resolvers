@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { RequestListInput } from './components/RequestListInput';
+import { resolver } from './resolvers/memory';
+import { MemorySolutions } from './components/MemorySolutions';
 
 export function Memory() {
 
@@ -12,7 +14,7 @@ export function Memory() {
 
   const [memoryRequestSequence, setMemoryRequestSequence] = useState(['']);
 
-  const [table, setTable] = useState({ memory: [[]], replaceOrder: [[]] });
+  const [solutions, setSolutions] = useState([]);
 
   const handleChangePageInput = (event) => {
     const { value } = event.target;
@@ -20,7 +22,6 @@ export function Memory() {
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
     
-    setTable({ memory: [[]], replaceOrder: [[]] });
     setPages(value);
   }
 
@@ -30,53 +31,15 @@ export function Memory() {
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
     
-    setTable({ memory: [[]], replaceOrder: [[]] });
     setFrames(value);
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log(memoryRequestSequence)
+    const sol = resolver({ memoryRequestSequence, frames });
 
-    let misses = 0;
-    let hits = 0;
-
-    const newTable = memoryRequestSequence.reduce(({memory, replaceOrder}, page, i) => {
-
-      const mem = [...memory[i]];
-      const order = [...replaceOrder[i]];
-
-      if (!mem.includes(page)) {
-        if (mem.length < frames) {
-          const newMem = [...mem, page];
-          const newOrder = [...order, page];
-          misses++;
-          memory.push(newMem);
-          replaceOrder.push(newOrder);
-          return {memory, replaceOrder}
-        } else {
-          const [pageToReplace] = order;
-          const pageIndexToReplace = mem.findIndex(page => page === pageToReplace);
-
-          mem.splice(pageIndexToReplace, 1, page);
-          order.shift();
-          order.push(page);
-
-          memory.push(mem);
-          replaceOrder.push(order);
-          return {memory, replaceOrder}
-        }
-      }
-
-      memory.push(mem);
-      replaceOrder.push(order);
-      hits++;
-      return {memory, replaceOrder}
-
-    }, { memory: [[]], replaceOrder: [[]] });
-
-    setTable(newTable);
+    setSolutions(prev => [...prev, {...sol, seq: memoryRequestSequence}]);
   }
 
   return (
@@ -97,36 +60,18 @@ export function Memory() {
             setMemoryRequestSequence={setMemoryRequestSequence}
           />
           <button 
-            disabled={!pages || !frames || memoryRequestSequence.some(p => ~~p < 1 || ~~p > pages)}
+            disabled={!pages || !frames || memoryRequestSequence.some(p => p < 1 || p > pages)}
             type="submit">
               Calcular
           </button>
         </form>
       </header>
       <main>
-        <table>
-          <thead>
-            <tr>
-              <th>Petición</th>
-              <th>Memoria</th>
-              <th>Orden de reemplazo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {table.memory.length !== 1 ?
-              memoryRequestSequence.map((page, i) => {
-                return (
-                  <tr key={i}>
-                    <td>{page}</td>
-                    <td>{...table.memory[i+1]}</td>
-                    <td>{...table.replaceOrder[i+1]}</td>
-                  </tr>
-                );
-              })
-              : null
-            }
-          </tbody>
-        </table>
+        <button
+          disabled={solutions.length === 0}
+          onClick={() => setSolutions([])}
+        >Limpiar</button>
+        <MemorySolutions solutions={solutions} />
       </main>
     </section>
   );
