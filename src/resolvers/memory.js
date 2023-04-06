@@ -8,8 +8,13 @@ export function resolver({ memoryRequestSequence, frames }) {
 
   memoryRequestSequence.forEach((page, i) => {
     if (i === 0) {
-      memoryHistory.push([page]);
-      orderHistory.push([page]);
+      const memory = Array(frames).fill(null);
+      const order = Array(frames).fill(null);
+      memory[0] = page;
+      order[0] = page;
+
+      memoryHistory.push(memory);
+      orderHistory.push(order);
       misses++;
       return;
     }
@@ -24,10 +29,15 @@ export function resolver({ memoryRequestSequence, frames }) {
       return;
     }
 
-    const hasAvailableMemory = memory.length < frames;
+    const firstEmptySpace = memory.findIndex(space => space === null);
+    const hasAvailableMemory = firstEmptySpace !== -1;
     if (hasAvailableMemory) {
-      memoryHistory.push(memory.concat(page));
-      orderHistory.push(order.concat(page));
+
+      memory[firstEmptySpace] = page;
+      order[firstEmptySpace] = page;
+
+      memoryHistory.push(memory);
+      orderHistory.push(order);
       misses++;
       return;
     }

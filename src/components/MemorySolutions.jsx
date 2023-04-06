@@ -1,4 +1,5 @@
-export function MemorySolutions({ solutions }) {
+export function MemorySolutions({ solutions, frames }) {
+
   return (
     <>
       {
@@ -7,9 +8,9 @@ export function MemorySolutions({ solutions }) {
             <table key={i}>
               <thead>
                 <tr>
-                  <th>Petición</th>
-                  <th>Memoria</th>
-                  <th>Orden de reemplazo</th>
+                  <th>Peticiones</th>
+                  <th colSpan={frames}>Historial de memoria</th>
+                  <th colSpan={frames}>Historial de orden</th>
                 </tr>
               </thead>
               <tbody>
@@ -17,8 +18,12 @@ export function MemorySolutions({ solutions }) {
                   seq.map((page, i) => (
                     <tr key={i}>
                       <td>{page}</td>
-                      <td>{...memoryHistory[i]}</td>
-                      <td>{...orderHistory[i]}</td>
+                      {
+                        memoryHistory[i].map((page, i) => <td key={i}>{page}</td>)
+                      }
+                      {
+                        orderHistory[i].map((page, i) => <td key={i}>{page}</td>)
+                      }
                     </tr>
                   ))
                 }
