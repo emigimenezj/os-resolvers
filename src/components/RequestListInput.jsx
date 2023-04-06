@@ -30,27 +30,27 @@ export function RequestListInput({
   const handleKeyDown = (index, event) => {
     if (event.key === 'Backspace' && !memoryRequestSequence[index] && index > 0) {
       event.preventDefault();
-      inputRefs.current.pop();
-      inputRefs.current[index - 1].focus();
       setMemoryRequestSequence((prevPages) => {
         const newPages = [...prevPages];
         newPages.pop();
         return newPages;
       });
+      inputRefs.current.pop();
+      inputRefs.current[index - 1].focus();
       return;
     }
     if (event.key === ' ' && event.target.value) {
       setMemoryRequestSequence((prevPages) => [...prevPages, '']);
       inputRefs.current.push(null);
     }
+    
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
       inputRefs.current[Math.max(0, index-1)].focus();
     }
     if (event.key === 'ArrowRight') {
       event.preventDefault();
-      const maxIndex = inputRefs.current.length-1;
-      console.log(inputRefs);
+      const maxIndex = inputRefs.current.filter(Boolean).length-1; // filter(Boolean) porque useRef([null]) deja un null al hacerle .pop() // por qué?
       inputRefs.current[Math.min(maxIndex, index+1)].focus();
     }
   }
