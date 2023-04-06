@@ -22,7 +22,7 @@ export function Memory() {
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
     
-    setPages(value);
+    setPages(parseInt(value, 10));
   }
 
   const handleChangeFrameInput = (event) => {
@@ -31,7 +31,7 @@ export function Memory() {
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
     
-    setFrames(value);
+    setFrames(parseInt(value, 10));
   }
 
   const handleSubmit = (event) => {
@@ -71,7 +71,7 @@ export function Memory() {
           disabled={solutions.length === 0}
           onClick={() => setSolutions([])}
         >Limpiar</button>
-        <MemorySolutions solutions={solutions} />
+        <MemorySolutions solutions={solutions} frames={frames} />
       </main>
     </section>
   );
