@@ -1,44 +1,31 @@
 export function resolver({ memoryRequestSequence, frames }) {
 
-  const memoryHistory = [];
-  const orderHistory = [];
+  const memoryRecord = [];
+  const orderRecord = [];
 
-  let hits = 0;
-  let misses = 0;
+  const hitsRecord = [...memoryRequestSequence].fill(false);
 
   memoryRequestSequence.forEach((page, i) => {
-    if (i === 0) {
-      const memory = Array(frames).fill(null);
-      const order = Array(frames).fill(null);
-      memory[0] = page;
-      order[0] = page;
 
-      memoryHistory.push(memory);
-      orderHistory.push(order);
-      misses++;
-      return;
-    }
-
-    const memory = [...memoryHistory.at(-1)];
-    const order = [...orderHistory.at(-1)];
+    const memory = i === 0 ? Array(frames).fill(null) : [...memoryRecord.at(-1)];
+    const order = i === 0 ? Array(frames).fill(null) : [...orderRecord.at(-1)];
 
     if (memory.includes(page)) {
-      memoryHistory.push(memory);
-      orderHistory.push(order);
-      hits++;
-      return;
+      memoryRecord.push(memory);
+      orderRecord.push(order);
+
+      hitsRecord[i] = true;
+      return
     }
 
     const firstEmptySpace = memory.findIndex(space => space === null);
     const hasAvailableMemory = firstEmptySpace !== -1;
     if (hasAvailableMemory) {
-
       memory[firstEmptySpace] = page;
       order[firstEmptySpace] = page;
 
-      memoryHistory.push(memory);
-      orderHistory.push(order);
-      misses++;
+      memoryRecord.push(memory);
+      orderRecord.push(order);
       return;
     }
     
@@ -49,11 +36,9 @@ export function resolver({ memoryRequestSequence, frames }) {
     order.shift();
     order.push(page);
 
-    memoryHistory.push(memory);
-    orderHistory.push(order);
-    
-    misses++;
+    memoryRecord.push(memory);
+    orderRecord.push(order);
   });
 
-  return { memoryHistory, orderHistory, hits, misses };
+  return { memoryRecord, orderRecord, hitsRecord };
 }
