@@ -1,5 +1,28 @@
 
 
 td {
+  position: relative;
   border: 1px solid black;
+  user-select: none;
+}
+
+td span {
+  display: none;
+  position: absolute;
+  top: 2rem;
+  left: 4.5rem;
+
+  padding: 10px;
+  border-radius: 15px;
+  border: 2px solid #333;
+
+  color: #333;
+  background-color: #DDD;
+  
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+td:hover span {
+  display: block;
 }
