@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RequestListInput } from './components/RequestListInput';
 import { resolver } from './resolvers/memory';
-import { MemorySolutions } from './components/MemorySolutions';
+import { MemoryCarouselSolutions } from './components/MemoryCarouselSolutions';
 
 export function Memory() {
 
@@ -39,7 +39,7 @@ export function Memory() {
 
     const sol = resolver({ memoryRequestSequence, frames });
 
-    setSolutions(prev => [...prev, {...sol, seq: memoryRequestSequence}]);
+    setSolutions(prev => [...prev, {...sol, requestSequence: memoryRequestSequence, frames}]);
   }
 
   return (
@@ -71,7 +71,7 @@ export function Memory() {
           disabled={solutions.length === 0}
           onClick={() => setSolutions([])}
         >Limpiar</button>
-        <MemorySolutions solutions={solutions} frames={frames} />
+        <MemoryCarouselSolutions solutions={solutions} />
       </main>
     </section>
   );
