@@ -7,9 +7,9 @@ import './App.css';
 
 function App() {
 
-  const [resolver, setResolver] = useState(false);
+  const [pickSched, setPickSched] = useState(false);
 
-  const handleClick = () => setResolver(prev => !prev)
+  const handleClick = () => setPickSched(prev => !prev)
 
   return (
     <>
@@ -20,7 +20,7 @@ function App() {
       >Cambiar</button>
 
       {
-        resolver
+        pickSched
         ?
         <Scheduling />
         :
