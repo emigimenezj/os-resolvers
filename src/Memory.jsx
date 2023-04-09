@@ -37,9 +37,9 @@ export function Memory() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const sol = resolver({ memoryRequestSequence, frames });
-
-    setSolutions(prev => [...prev, {...sol, requestSequence: memoryRequestSequence, frames}]);
+    const sol = resolver({ memoryRequestSequence, frames, type: 'LRU' });
+    
+    setSolutions(prev => [...prev, sol]);
   }
 
   return (
