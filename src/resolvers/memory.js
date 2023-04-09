@@ -1,34 +1,61 @@
-export function resolver({ memoryRequestSequence, frames }) {
+export function resolver({ memoryRequestSequence, frames, type = 'FIFO' }) {
+  type = 'SC';
 
   const memoryRecord = [];
   const orderRecord = [];
 
+  const scRecord = [];
+
   const hitsRecord = [...memoryRequestSequence].fill(false);
+
+  const formatRecord = (record) => {
+    for (const rd of record) {
+      if (rd.length !== frames) {
+        const start = rd.length;
+        rd.length = frames;
+        rd.fill(null, start);
+      }
+    }
+  }
 
   memoryRequestSequence.forEach((page, i) => {
 
-    const memory = i === 0 ? Array(frames).fill(null) : [...memoryRecord.at(-1)];
-    const order = i === 0 ? Array(frames).fill(null) : [...orderRecord.at(-1)];
+    const memory = i === 0 ? [] : [...memoryRecord.at(-1)];
+    const order = i === 0 ? [] : [...orderRecord.at(-1)];
+    const sc = i === 0 ? [] : [...scRecord.at(-1)];
 
     if (memory.includes(page)) {
+
+      if (type === 'LRU') {
+        const index = order.findIndex(p => p === page);
+        order.splice(index, 1);
+        order.push(page)
+      }
+
+      if (type === 'SC') sc.push(page);
+
       memoryRecord.push(memory);
       orderRecord.push(order);
+      scRecord.push(sc);
 
       hitsRecord[i] = true;
       return
     }
 
-    const firstEmptySpace = memory.findIndex(space => space === null);
-    const hasAvailableMemory = firstEmptySpace !== -1;
+    const hasAvailableMemory = memory.length < frames;
     if (hasAvailableMemory) {
-      memory[firstEmptySpace] = page;
-      order[firstEmptySpace] = page;
+      memory.push(page)
+      order.push(page)
 
       memoryRecord.push(memory);
       orderRecord.push(order);
+      scRecord.push(sc);
       return;
     }
     
+    while (sc.includes(order[0]))
+      (sc.splice(sc.findIndex(p => p === order[0]), 1), order.push(order.shift()))
+
     const [pageToReplace] = order;
     const pageIndexToReplace = memory.findIndex(page => page === pageToReplace);
 
@@ -38,7 +65,18 @@ export function resolver({ memoryRequestSequence, frames }) {
 
     memoryRecord.push(memory);
     orderRecord.push(order);
+    scRecord.push(sc);
   });
 
-  return { memoryRecord, orderRecord, hitsRecord };
+  formatRecord(memoryRecord);
+  formatRecord(orderRecord);
+
+  return {
+    memoryRecord,
+    orderRecord,
+    scRecord,
+    hitsRecord,
+    requestSequence: memoryRequestSequence,
+    frames
+  };
 }
