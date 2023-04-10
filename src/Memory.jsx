@@ -5,8 +5,8 @@ import { MemoryCarouselSolutions } from './components/MemoryCarouselSolutions';
 
 export function Memory() {
 
-  // cantidad de marcos: 4
   // cantidad de páginas: 6            
+  // cantidad de marcos: 4
   // lista de peticiones: 1, 2, 1, 3, 4, 3, 5, 6, 2
 
   const [pages, setPages] = useState('');
@@ -22,7 +22,7 @@ export function Memory() {
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
     
-    setPages(parseInt(value, 10));
+    setPages(value ? parseInt(value, 10) : value);
   }
 
   const handleChangeFrameInput = (event) => {
@@ -31,22 +31,29 @@ export function Memory() {
     const isOnlyDigits = /^\d*$/.test(value);
     if(!isOnlyDigits) return;
     
-    setFrames(parseInt(value, 10));
+    setFrames(value ? parseInt(value, 10) : value);
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const sol = resolver({ memoryRequestSequence, frames, type: 'LRU' });
+    const sol = resolver({ memoryRequestSequence, frames, type: event.target.algorithm.value });
     
     setSolutions(prev => [...prev, sol]);
   }
 
   return (
-    <section>
+    <main>
       <header>
         <h1>Memory!</h1>
         <form onSubmit={handleSubmit}>
+          <label htmlFor='algorithm'>Tipo de algoritmo:</label>
+          <select id="algorithm" name="algorithm" defaultValue="FIFO">
+            <option value="FIFO">First Come First Serve (FCFS o FIFO)</option>
+            <option value="LRU">Last Recently Used (LRU)</option>
+            <option value="SC">Second Chance (SC)</option>
+          </select>
+          <br />
           <label>Cantidad de páginas:</label>
           <input onChange={handleChangePageInput} type="text" value={pages} />
           <br />
@@ -66,13 +73,15 @@ export function Memory() {
           </button>
         </form>
       </header>
-      <main>
-        <button
-          disabled={solutions.length === 0}
-          onClick={() => setSolutions([])}
-        >Limpiar</button>
+      <section>
+        <header className='carousel-solutions-header'>
+          <button className='btn-clean'
+            disabled={solutions.length === 0}
+            onClick={() => setSolutions([])}
+          >Limpiar</button>
+        </header>
         <MemoryCarouselSolutions solutions={solutions} />
-      </main>
-    </section>
+      </section>
+    </main>
   );
 }
