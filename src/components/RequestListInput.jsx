@@ -12,18 +12,37 @@ export function RequestListInput({
   const handleChange = (index, event) => {
     const { value } = event.target;
 
+    console.log(value);
+
     if(value === ' ') return;
 
     if(value.at(-1) === ' ' && index < memoryRequestSequence.length - 1)
       inputRefs.current[index + 1].focus();
-    
-    const isOnlyDigits = /^\d*$/.test(value);
-    if(!isOnlyDigits) return;
 
-    setMemoryRequestSequence((prevPages) => {
+    setMemoryRequestSequence(prevPages => {
+      
       const newPages = [...prevPages];
-      newPages[index] = value ? parseInt(value, 10) : value;
-      return newPages;
+
+      const isOnlyDigits = /^\d*$/.test(value);
+      if (isOnlyDigits) {
+        newPages[index] = value ? parseInt(value, 10) : value;
+        return newPages;  
+      };
+      console.log(value);
+      const isCopyPaste = /^\s*\d+\s*\d*\s*(,\s*\d+\s*\d*\s*)+$/.test(value);
+      if (isCopyPaste) {
+        const parsedPages = value.match(/\d+/g).map(page => parseInt(page, 10));
+
+        const newRefs = [...parsedPages].fill(null);
+        inputRefs.current.concat(newRefs);
+
+        newPages[index] = parsedPages.shift();
+        newPages.splice(index+1, 0, ...parsedPages);
+
+        return newPages;
+      }
+      
+      return prevPages;
     });
   }
 
@@ -40,7 +59,12 @@ export function RequestListInput({
       return;
     }
     if (event.key === ' ' && event.target.value) {
-      setMemoryRequestSequence((prevPages) => [...prevPages, '']);
+      setMemoryRequestSequence(prevPages => {
+        const index = inputRefs.current.findIndex(el => el === document.activeElement);
+        const newSequence = [...prevPages];
+        newSequence.splice(index+1, 0, '');
+        return newSequence;
+      });
       inputRefs.current.push(null);
     }
     
@@ -75,6 +99,7 @@ export function RequestListInput({
           <input
             disabled={!pages || !frames}
             key={index}
+            className="sequence-request-input"
             type="text"
             value={page}
             onChange={(event) => handleChange(index, event)}
