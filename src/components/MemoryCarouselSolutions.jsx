@@ -3,7 +3,7 @@ import { MemorySolution } from './MemorySolution';
 export function MemoryCarouselSolutions({ solutions }) {
 
   return (
-    <>
+    <div className='carousel-solutions-container'>
       {
         solutions.map((sol, index) => {
           return (
@@ -20,6 +20,6 @@ export function MemoryCarouselSolutions({ solutions }) {
           );
         })
       }
-    </>
+    </div>
   );
 }
