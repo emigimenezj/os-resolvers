@@ -1,8 +1,11 @@
-
-
 td {
+  text-align: center;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
   position: relative;
   border: 1px solid black;
+  background-clip: content-box;
   user-select: none;
 }
 
@@ -10,7 +13,7 @@ td span {
   display: none;
   position: absolute;
   top: 2rem;
-  left: 4.5rem;
+  left: 2.5rem;
 
   padding: 10px;
   border-radius: 15px;
@@ -24,5 +27,15 @@ td span {
 }
 
 td:hover span {
-  display: block;
+  display: inline-block;
+}
+
+.carousel-solutions-container {
+  display: flex;
+  gap: 30px;
+}
+
+.order-slot {
+  border-radius: 50%;
+  background-clip: padding-box;
 }
