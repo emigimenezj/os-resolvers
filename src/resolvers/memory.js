@@ -1,9 +1,7 @@
 export function resolver({ memoryRequestSequence, frames, type = 'FIFO' }) {
-  type = 'SC';
 
   const memoryRecord = [];
   const orderRecord = [];
-
   const scRecord = [];
 
   const hitsRecord = [...memoryRequestSequence].fill(false);
@@ -72,11 +70,12 @@ export function resolver({ memoryRequestSequence, frames, type = 'FIFO' }) {
   formatRecord(orderRecord);
 
   return {
+    requestSequence: memoryRequestSequence,
     memoryRecord,
     orderRecord,
     scRecord,
     hitsRecord,
-    requestSequence: memoryRequestSequence,
-    frames
+    frames,
+    type
   };
 }
