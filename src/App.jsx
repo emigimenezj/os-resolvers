@@ -13,18 +13,18 @@ function App() {
 
   return (
     <>
-      <h1>Resolvers!</h1>
-
-      <button
-        onClick={handleClick}
-      >Cambiar</button>
-
+      <header>
+        <h1>Resolvers!</h1>
+      </header>
+      <nav>
+        <button
+          onClick={handleClick}
+        >Cambiar</button>
+      </nav>
       {
         pickSched
-        ?
-        <Scheduling />
-        :
-        <Memory />
+        ? <Scheduling />
+        : <Memory />
       }
     </>
   );
