@@ -18,7 +18,7 @@
   opacity: 0;
   animation: fadeIn ease-in 1;
   animation-fill-mode: forwards;
-  animation-duration: 0.5s;
+  animation-duration: 0.15s;
 }
 
 @keyframes fadeIn {
