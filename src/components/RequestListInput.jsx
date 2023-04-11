@@ -80,14 +80,22 @@ export function RequestListInput({
   }
 
   const handleError = () => {
-    const badPages = memoryRequestSequence.filter(page => page > pages);
+
+    const nonEmptyInputs = inputRefs.current.filter(Boolean);
+    const outOfRangeInputs = nonEmptyInputs.filter(({value}) => value > pages);
+
+    const errorMsg = pages
+      ? `Hay páginas fuera de rango. El máximo rango es ${pages}.`
+      : `Por favor, ingresá una cantidad de páginas válida.`
 
     return (
-      <div style={{color: 'red'}}>
+      <>
         {
-          badPages.map((p, i) => <p key={i}>La página {p} está fuera de rango.</p>)
+          outOfRangeInputs.length
+            ? <div style={{color: 'red'}}>{errorMsg}</div>
+            : null
         }
-      </div>
+      </>
     );
   }
 
@@ -99,7 +107,7 @@ export function RequestListInput({
           <input
             disabled={!pages || !frames}
             key={index}
-            className="sequence-request-input"
+            className={`sequence-request-input ${page > pages ? 'out-of-range' : ''}`}
             type="text"
             value={page}
             onChange={(event) => handleChange(index, event)}

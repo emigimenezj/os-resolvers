@@ -50,7 +50,7 @@ export function MemorySolution({ solution }) {
   } = solution;
 
   return (
-    <tbody>
+    <>
       {
         requestSequence.map((pageRequested, i) => (
           <tr key={i}>
@@ -100,6 +100,6 @@ export function MemorySolution({ solution }) {
           </tr>
         ))
       }
-    </tbody>
+    </>
   );
 }
