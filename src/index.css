@@ -1,11 +1,55 @@
+@import 'styles/normalize.css';
+
+:root {
+  --select-border: #777;
+  --select-focus: blue;
+  --select-arrow: var(--select-border);
+}
+
+.sequence-request-input {
+  width: 35px;
+}
+
+.out-of-range {
+  border-color: red;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+tr:nth-child(odd) > td {
+  background-color: rgba(210, 210, 240, 0.5);
+}
+
+td:first-child {
+  border: none;
+  border-radius: 10px;
+}
+
 td {
-  text-align: center;
-  vertical-align: middle;
+  position: relative;
   width: 25px;
   height: 25px;
-  position: relative;
+
+  text-align: center;
+  vertical-align: middle;
+  
   border: 1px solid black;
   background-clip: content-box;
+  
   user-select: none;
 }
 

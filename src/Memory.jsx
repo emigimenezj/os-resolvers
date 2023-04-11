@@ -11,9 +11,7 @@ export function Memory() {
 
   const [pages, setPages] = useState('');
   const [frames, setFrames] = useState('');
-
   const [memoryRequestSequence, setMemoryRequestSequence] = useState(['']);
-
   const [solutions, setSolutions] = useState([]);
 
   const handleChangePageInput = (event) => {
@@ -48,7 +46,7 @@ export function Memory() {
         <h1>Memory!</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor='algorithm'>Tipo de algoritmo:</label>
-          <select id="algorithm" name="algorithm" defaultValue="FIFO">
+          <select id="algorithm" className="select" name="algorithm" defaultValue="FIFO">
             <option value="FIFO">First Come First Serve (FCFS o FIFO)</option>
             <option value="LRU">Last Recently Used (LRU)</option>
             <option value="SC">Second Chance (SC)</option>
