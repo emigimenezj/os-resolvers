@@ -7,53 +7,57 @@
 }
 
 .sequence-request-input {
-  width: 35px;
+  width: 25px;
 }
 
 .out-of-range {
   border-color: red;
 }
 
-.fade-in {
-  opacity: 0;
-  animation: fadeIn ease-in 1;
-  animation-fill-mode: forwards;
-  animation-duration: 0.15s;
+.carousel-solutions-container {
+  display: flex;
+  gap: 30px;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+/*
+.solution-container {
+  position: relative;
+}
+*/
+
+.mem-sol-row:nth-child(odd) > td {
+  background-color: rgba(210, 210, 240, 0.4);
 }
 
-tr:nth-child(odd) > td {
-  background-color: rgba(210, 210, 240, 0.5);
+.mem-sol-slot {
+  width: 25px;
+  height: 25px;
+  position: relative;
+
+  text-align: center;
+  vertical-align: middle;
+
+  border: 1px solid black;
+  background-clip: content-box;
+
+  user-select: none;
 }
 
-td:first-child {
+.mem-sol-slot:first-child {
   border: none;
   border-radius: 10px;
 }
 
-td {
-  position: relative;
-  width: 25px;
-  height: 25px;
-
-  text-align: center;
-  vertical-align: middle;
-  
-  border: 1px solid black;
-  background-clip: content-box;
-  
-  user-select: none;
+.mem-sol-slot:hover .hidden-msg {
+  display: inline-block;
 }
 
-td span {
+.order-slot {
+  border-radius: 50%;
+  background-clip: padding-box;
+}
+
+.hidden-msg {
   display: none;
   position: absolute;
   top: 2rem;
@@ -65,21 +69,7 @@ td span {
 
   color: #333;
   background-color: #DDD;
-  
+
   white-space: nowrap;
-  z-index: 9999;
-}
-
-td:hover span {
-  display: inline-block;
-}
-
-.carousel-solutions-container {
-  display: flex;
-  gap: 30px;
-}
-
-.order-slot {
-  border-radius: 50%;
-  background-clip: padding-box;
+  z-index: 10;
 }
