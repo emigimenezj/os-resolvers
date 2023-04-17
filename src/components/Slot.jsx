@@ -12,9 +12,9 @@ export function Slot({content = '', msg = null, bg = null, className}) {
   });
   
   return (
-    <td style={bg ? { backgroundColor: bg} : null} className={className}>
+    <td style={bg ? { backgroundColor: bg} : null} className={`mem-sol-slot ${className}`}>
       {content}
-      {msg ? <span>{msgFormatted}</span> : null}
+      {msg ? <span className="hidden-msg">{msgFormatted}</span> : null}
     </td>
   );
 }

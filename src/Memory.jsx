@@ -45,10 +45,10 @@ export function Memory() {
       <header>
         <h1>Memory!</h1>
         <form onSubmit={handleSubmit}>
-          <label htmlFor='algorithm'>Tipo de algoritmo:</label>
-          <select id="algorithm" className="select" name="algorithm" defaultValue="FIFO">
-            <option value="FIFO">First Come First Serve (FCFS o FIFO)</option>
-            <option value="LRU">Last Recently Used (LRU)</option>
+          <label htmlFor="mem-algorithm">Tipo de algoritmo:</label>
+          <select id="mem-algorithm" className="select" name="algorithm" defaultValue="FIFO">
+            <option value="FIFO">First-Come, First-Serve (FCFS o FIFO)</option>
+            <option value="LRU">Least Recently Used (LRU)</option>
             <option value="SC">Second Chance (SC)</option>
           </select>
           <br />

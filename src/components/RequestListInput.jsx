@@ -12,8 +12,6 @@ export function RequestListInput({
   const handleChange = (index, event) => {
     const { value } = event.target;
 
-    console.log(value);
-
     if(value === ' ') return;
 
     if(value.at(-1) === ' ' && index < memoryRequestSequence.length - 1)
@@ -28,7 +26,7 @@ export function RequestListInput({
         newPages[index] = value ? parseInt(value, 10) : value;
         return newPages;  
       };
-      console.log(value);
+      
       const isCopyPaste = /^\s*\d+\s*\d*\s*(,\s*\d+\s*\d*\s*)+$/.test(value);
       if (isCopyPaste) {
         const parsedPages = value.match(/\d+/g).map(page => parseInt(page, 10));

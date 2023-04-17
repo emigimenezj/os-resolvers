@@ -53,7 +53,7 @@ export function MemorySolution({ solution }) {
     <>
       {
         requestSequence.map((pageRequested, i) => (
-          <tr key={i}>
+          <tr key={i} className="mem-sol-row">
             <Slot content={pageRequested} msg={MESSAGES.REQUEST(pageRequested)} />
             {
               memoryRecord[i].map((page, j) => {

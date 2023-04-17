@@ -5,7 +5,7 @@ export function MemoryCarouselSolutions({ solutions }) {
   const mcd = (a, b) => b === 0 ? a : mcd(b, a % b);
 
   return (
-    <div className={`carousel-solutions-container`}>
+    <div className="carousel-solutions-container">
       {
         solutions.map((sol, index) => {
           const { hitsRecord } = sol;
@@ -24,7 +24,7 @@ export function MemoryCarouselSolutions({ solutions }) {
             : '0.0';
 
           return (
-            <div key={index} className="fade-in">
+            <div key={index} className="solution-container fade-in">
               <table>
                 <thead>
                   <tr>
