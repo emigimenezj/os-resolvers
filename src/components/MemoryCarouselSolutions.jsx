@@ -20,7 +20,7 @@ export function MemoryCarouselSolutions({ solutions }) {
             ? simplifiedFrac
             : 0;
           const hitRateAprox = totalHits
-            ? (totalHits/totalMisses).toFixed(3).replace(/0+$/, '')
+            ? (totalHits/totalMisses).toFixed(3).replace(/\.?0+$/, '')
             : '0.0';
 
           return (
