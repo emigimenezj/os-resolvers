@@ -7,11 +7,11 @@ export function resolver({ memoryRequestSequence, frames, type = 'FIFO' }) {
   const hitsRecord = [...memoryRequestSequence].fill(false);
 
   const formatRecord = (record) => {
-    for (const rd of record) {
-      if (rd.length !== frames) {
-        const start = rd.length;
-        rd.length = frames;
-        rd.fill(null, start);
+    for (const row of record) {
+      if (row.length !== frames) {
+        const start = row.length;
+        row.length = frames;
+        row.fill(null, start);
       }
     }
   }
