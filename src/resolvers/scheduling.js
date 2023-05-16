@@ -29,6 +29,13 @@ export function resolver({ processes, quantum }) {
     });
   }
 
+  const ALGORITHM = {
+    FCFS: () => {
+      const [next] = CPU.ready.splice(0, 1);
+      CPU.running = next;
+      CPU.quantum = quantum;
+  }
+  }
   while (processes.some(p => p.burst !== 0)) {
 
     console.log("hola?");
@@ -45,14 +52,18 @@ export function resolver({ processes, quantum }) {
       }
 
       //*** SELECTION CRITERIA ***//
-      const [next] = CPU.ready.splice(0, 1);
-      CPU.running = next;
+      ALGORITHM[type]();
     }
 
     recording();
 
     CPU.running.burst--;
-    if (!CPU.running.burst) {
+    CPU.quantum--;
+
+    const hasQuantum = CPU.quantum !== 0;
+    const hasBurst = CPU.running.burst !== 0;
+    if (!hasQuantum || !hasBurst) {
+      if (hasBurst) CPU.ready.push(CPU.running)
       CPU.running = null;
     }
     // TODO: quantum
