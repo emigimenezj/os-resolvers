@@ -5,7 +5,7 @@ import { Scheduling } from './Scheduling';
 
 function App() {
 
-  const [pickSched, setPickSched] = useState(false);
+  const [pickSched, setPickSched] = useState(true);
 
   const handleClick = () => setPickSched(prev => !prev)
 

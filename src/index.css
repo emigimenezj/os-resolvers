@@ -56,16 +56,20 @@
   user-select: none;
 }
 .sched-sol-after-exec {
-  background-color: #EEE;
+  background-color: #eeeeee88;
 }
 .sched-sol-before-exec {
-  background-color: #BBB;
+  background-color: #eeeeee88;
 }
 .sched-sol-waiting {
-  background-color: rgb(200, 200, 100);
+  background-color: rgba(230, 210, 150, 0.6);
 }
 .sched-sol-running {
-  background-color: rgb(97, 190, 97);
+  background-color: rgb(100, 175, 100);
+}
+.sched-sol-ms-row > td {
+  text-align: center;
+  vertical-align: middle;
 }
 
 .mem-sol-slot:first-child {

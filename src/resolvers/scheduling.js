@@ -6,7 +6,7 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
     processes = processes.map(p => ({...p, originalBurst: p.burst}));
 
   quantum = !quantum ? Infinity : quantum;
-
+  
   const execRecord = Array.from(Array(processes.length), () => []);
 
   const CPU = {
@@ -23,9 +23,9 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
         return;
       }
       if (CPU.running === p) {
-          execRecord[i].push(PROC.RUNNING);
-          return;
-        }
+        execRecord[i].push(PROC.RUNNING);
+        return;
+      }
       if (!p.burst) {
         execRecord[i].push(PROC.AFTER_EXEC);
         return;
@@ -48,7 +48,7 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
       const [next] = CPU.ready.splice(index, 1);
       CPU.running = next;
       CPU.quantum = quantum;
-  }
+    }
   }
 
   while (processes.some(p => p.burst !== 0)) {
@@ -59,7 +59,7 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
     const arrivalProcess = processes.filter(p => p.arrival === CPU.ms);
     CPU.ready = CPU.ready.concat(arrivalProcess);
 
-      if (!CPU.running) {
+    if (!CPU.running) {
       const hasWaitingProcess = CPU.ready.length;
       if (!hasWaitingProcess) {
         recording();
@@ -82,7 +82,6 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
       if (hasBurst) CPU.ready.push(CPU.running)
       CPU.running = null;
     }
-    // TODO: quantum
 
     CPU.ms++;
   }
