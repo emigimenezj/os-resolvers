@@ -7,7 +7,40 @@ import './styles/scheduling.css';
 
 export function SchedulingCarouselSolutions({ solutions }) {
   return (
-    <h1>Hola 😛</h1>
+    <div className="carousel-solutions-container">
+      {
+        solutions.map((sol, index) => {
+          return (
+            <div key={index} className="solutioncontainer">
+              <table>
+                <thead>
+                  <tr>
+                    {sol.execRecord.map((_, i) => <th key={i}>{`P${i+1}`}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    sol.execRecord.map((rec, i) => {
+                      return (
+                        <tr key={i}>
+                          {
+                            rec.map((slot, j) => {
+                              return (
+                                <td key={j}>{slot}</td>
+                              );
+                            })
+                          }
+                        </tr>
+                      );
+                    })
+                  }
+                </tbody>
+              </table>
+            </div>
+          );
+        })
+      }
+    </div>
   )
 }
 
