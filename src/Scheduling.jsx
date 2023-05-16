@@ -41,8 +41,8 @@ export function SchedulingCarouselSolutions({ solutions }) {
                       );
                     })
                   }
-                  <tr>
-                    {sol.execRecord[0].map((_, i) => <td>{i+1}</td>)}
+                  <tr className="sched-sol-ms-row">
+                    {sol.execRecord[0].map((_, i) => <td key={i}>{i}</td>)}
                   </tr>
                 </tbody>
               </table>
@@ -69,6 +69,7 @@ export function Scheduling() {
     const [i, prop] = event.target.name.split('-');
     setProcesses(prev => {
       const newProc = [...prev];
+      console.log(event.target.value);
       newProc[i][prop] = parseInt(event.target.value, 10);
       return newProc;
     });
@@ -80,7 +81,7 @@ export function Scheduling() {
     event.preventDefault();
 
     const copyProcesses = [...processes].map(p => ({...p}));
-    const sol = resolver({processes: copyProcesses, quantum});
+    const sol = resolver({processes: copyProcesses, quantum, type: event.target.algorithm.value });
 
     setSolutions(prev => [...prev, sol]);
 
@@ -93,9 +94,9 @@ export function Scheduling() {
         <h1> Scheduling ! </h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="sched-algorithm">Tipo de algoritmo:</label>
-          <select id="sched-algorithm" className="select" name="algorithm" defaultValue="FIFO">
-            <option value="FIFO">First-Come, First-Serve (FCFS o FIFO)</option>
-            <option value="LRU">Shortest-Job-First</option>
+          <select id="sched-algorithm" className="select" name="algorithm" defaultValue="FCFS">
+            <option value="FCFS">First-Come, First-Serve (FCFS o FIFO)</option>
+            <option value="SJF">Shortest-Job-First</option>
             <option value="SC">Multilevel Queue</option>
           </select>
           <br />
