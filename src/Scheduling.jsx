@@ -152,7 +152,7 @@ export function Scheduling() {
       </header>
       <section>
         <header className="carousel-solutions-header">
-          <button className="btn-clean"
+          <button onClick={() => setSolutions([])} className="btn-clean"
             
           >Limpiar</button>
         </header>
