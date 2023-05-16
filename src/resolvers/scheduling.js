@@ -36,7 +36,9 @@ export function resolver({ processes, quantum }) {
       CPU.quantum = quantum;
   }
   }
+
   while (processes.some(p => p.burst !== 0)) {
+    if (CPU.ms >= 1000) break;
 
     console.log("hola?");
 
