@@ -23,7 +23,7 @@ export function MemoryCarouselSolutions({ solutions }) {
             ? (totalHits/totalMisses).toFixed(3).replace(/\.?0+$/, '')
             : '0.0';
 
-          return (
+          return ( // TODO: remover el index como key cuando se puedan borrar las soluciones individualmente con un botón
             <div key={index} className="solution-container fade-in">
               <table>
                 <thead>
