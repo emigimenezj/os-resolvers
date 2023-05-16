@@ -16,6 +16,7 @@ export function Scheduling() {
   const emptyProcess = { burst: 0, arrival: 0, priority: 0 };
 
   const [processes, setProcesses] = useState([{...emptyProcess}]);
+  const [quantum, setQuantum] = useState('');
   const [solutions, setSolutions] = useState([]);
 
   const handleChangeProcessesInput = (event) =>
@@ -29,6 +30,8 @@ export function Scheduling() {
       return newProc;
     });
   }
+
+  const handleQuantumInput = (event) => setQuantum(parseInt(event.target.value, 10))
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -71,6 +74,8 @@ export function Scheduling() {
             id="scheduling-form-input-preemptive"
             name="preemptive"
             placeholder="0"
+            onChange={handleQuantumInput}
+            value={quantum}
           />
           <table>
             <thead>
