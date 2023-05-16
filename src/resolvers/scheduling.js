@@ -1,6 +1,11 @@
 import { PROC } from '../constants';
 
-export function resolver({ processes, quantum }) {
+export function resolver({ processes, quantum, type = 'FCFS' }) {
+
+  if (type === 'SJF')
+    processes = processes.map(p => ({...p, originalBurst: p.burst}));
+
+  quantum = !quantum ? Infinity : quantum;
 
   const execRecord = Array.from(Array(processes.length), () => []);
 
@@ -32,6 +37,15 @@ export function resolver({ processes, quantum }) {
   const ALGORITHM = {
     FCFS: () => {
       const [next] = CPU.ready.splice(0, 1);
+      CPU.running = next;
+      CPU.quantum = quantum;
+    },
+    SJF: () => {      
+      const originalBursts = CPU.ready.map(p => p.originalBurst);
+      const targetBurst = Math.min(...originalBursts);
+
+      const index = CPU.ready.findIndex(p => p.originalBurst === targetBurst);
+      const [next] = CPU.ready.splice(index, 1);
       CPU.running = next;
       CPU.quantum = quantum;
   }
