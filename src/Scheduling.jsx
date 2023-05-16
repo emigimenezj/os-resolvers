@@ -59,7 +59,7 @@ export function Scheduling() {
     const [i, prop] = event.target.name.split('-');
     setProcesses(prev => {
       const newProc = [...prev];
-      newProc[i][prop] = event.target.value;
+      newProc[i][prop] = parseInt(event.target.value, 10);
       return newProc;
     });
   }
