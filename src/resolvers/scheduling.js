@@ -1,10 +1,4 @@
-const PROC = {
-  BEFORE_EXEC: 'B',
-  RUNNING: 'R',
-  WAITING: 'W',
-  CTX_SWITCH: 'switch',
-  AFTER_EXEC: 'A'
-}
+import { PROC } from '../constants';
 
 export function resolver({ processes, quantum }) {
 
