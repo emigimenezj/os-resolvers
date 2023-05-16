@@ -69,8 +69,7 @@ export function Scheduling() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const copyProcesses = [...processes];
-    console.log(copyProcesses)
+    const copyProcesses = [...processes].map(p => ({...p}));
     const sol = resolver({processes: copyProcesses, quantum});
 
     setSolutions(prev => [...prev, sol]);
