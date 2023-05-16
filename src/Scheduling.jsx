@@ -1,9 +1,16 @@
 import { useState } from 'react';
 
 import { resolver } from './resolvers/scheduling';
+import { PROC } from './constants';
 
 import './styles/scheduling.css';
 
+const SLOT_TYPE = {
+  [PROC.AFTER_EXEC]: 'sched-sol-after-exec',
+  [PROC.BEFORE_EXEC]: 'sched-sol-before-exec',
+  [PROC.WAITING]: 'sched-sol-waiting',
+  [PROC.RUNNING]: 'sched-sol-running'
+}
 
 export function SchedulingCarouselSolutions({ solutions }) {
   return (
@@ -22,11 +29,11 @@ export function SchedulingCarouselSolutions({ solutions }) {
                   {
                     sol.execRecord.map((rec, i) => {
                       return (
-                        <tr key={i}>
+                        <tr key={i} className="sched-sol-row">
                           {
                             rec.map((slot, j) => {
                               return (
-                                <td key={j}>{slot}</td>
+                                <td key={j} className={`sched-sol-slot ${SLOT_TYPE[slot]}`}></td>
                               );
                             })
                           }
@@ -34,6 +41,9 @@ export function SchedulingCarouselSolutions({ solutions }) {
                       );
                     })
                   }
+                  <tr>
+                    {sol.execRecord[0].map((_, i) => <td>{i+1}</td>)}
+                  </tr>
                 </tbody>
               </table>
             </div>
