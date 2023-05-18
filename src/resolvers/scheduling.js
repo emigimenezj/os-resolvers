@@ -36,7 +36,10 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
 
   const ALGORITHM = {
     FCFS: () => {
-      const [next] = CPU.ready.splice(0, 1);
+      const highestPriorityPresent = Math.min(...CPU.ready.map(p => p.priority));
+      const index = CPU.ready.findIndex(p => p.priority === highestPriorityPresent);
+
+      const [next] = CPU.ready.splice(index, 1);
       CPU.running = next;
       CPU.quantum = quantum;
     },
