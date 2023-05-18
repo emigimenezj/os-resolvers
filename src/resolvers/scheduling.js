@@ -43,11 +43,15 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
       CPU.running = next;
       CPU.quantum = quantum;
     },
-    SJF: () => {      
-      const originalBursts = CPU.ready.map(p => p.originalBurst);
+    SJF: () => {
+      const highestPriorityPresent = Math.min(...CPU.ready.map(p => p.priority));
+      const readyPrior = CPU.ready.filter(p => p.priority === highestPriorityPresent);
+
+      const originalBursts = readyPrior.map(p => p.originalBurst);
       const targetBurst = Math.min(...originalBursts);
 
-      const index = CPU.ready.findIndex(p => p.originalBurst === targetBurst);
+      const index = readyPrior.findIndex(p => p.originalBurst === targetBurst);
+      
       const [next] = CPU.ready.splice(index, 1);
       CPU.running = next;
       CPU.quantum = quantum;
