@@ -90,12 +90,12 @@ export function Scheduling() {
 
   /*
   TODO:
-  - Validar las actualizaciones de los inputs de scheduling (burst, arrive, priority and quantum)
-  Cuando se pone un valor y se borra, se envía <empty string> como valor de input, eso rompe el algoritmo y queda en while(true)
-  - Agregar soporte para manejo de prioridades que sea compatible con desalojo por quantums
-  - Averiguar lo de colas multi-nivel y multi-nivel con feedback
-  - Agregar soporte para el cálculo de THROUGHPUT, TURNAROUND, WAITING TIME, RESPONSE TIME
-  - Revisar AGING (aumentar gradualmente la prioridad de procesos que estén esperadno hace mucho)
+  - [ ]Validar las actualizaciones de los inputs de scheduling (burst, arrive, priority and quantum)
+  (OBS) Cuando se pone un valor y se borra, se envía <empty string> como valor de input, eso rompe el algoritmo y queda en while(true)
+  - [+-] Agregar soporte para manejo de prioridades que sea compatible con desalojo por quantums
+  - [ ] Averiguar lo de colas multi-nivel y multi-nivel con feedback
+  - [+-] Agregar soporte para el cálculo de THROUGHPUT, TURNAROUND, WAITING TIME, RESPONSE TIME
+  - [ ] Revisar AGING (aumentar gradualmente la prioridad de procesos que estén esperadno hace mucho)
   */
 
   return (
