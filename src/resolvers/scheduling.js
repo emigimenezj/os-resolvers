@@ -53,7 +53,7 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
           if (p.originalBurst < rec.originalBurst) return {...p, index};
           return rec;
       }, {priority: Infinity, originalBurst: Infinity});
-      
+
       const [next] = CPU.ready.splice(index, 1);
       CPU.running = next;
       CPU.quantum = quantum;
@@ -63,14 +63,12 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
   while (processes.some(p => p.burst !== 0)) {
     if (CPU.ms >= 1000) break;
 
-    console.log("hola?");
-
-    const arrivalProcess = processes.filter(p => p.arrival === CPU.ms);
-    CPU.ready = CPU.ready.concat(arrivalProcess);
+    const arrivalProcs = processes.filter(p => p.arrival === CPU.ms);
+    CPU.ready.push(...arrivalProcs);
 
     if (!CPU.running) {
-      const hasWaitingProcess = CPU.ready.length;
-      if (!hasWaitingProcess) {
+      const hasWaitingProcs = CPU.ready.length;
+      if (!hasWaitingProcs) {
         recording();
         CPU.ms++;
         continue;
