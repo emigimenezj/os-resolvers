@@ -46,7 +46,9 @@ export function SchedulingCarouselSolutions({ solutions }) {
                   </tr>
                 </tbody>
               </table>
-              <p>Average waiting time: {sol.averageWaitingTime}</p>
+              <p>Average response time: {sol.responseTime}</p>
+              <p>Average waiting time: {sol.waitingTime}</p>
+              <p>Average turnaround time: {sol.turnaround}</p>
             </div>
           );
         })

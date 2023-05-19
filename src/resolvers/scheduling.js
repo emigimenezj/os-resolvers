@@ -4,6 +4,7 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
 
   processes = processes.map(p => ({
     ...p,
+    responseTime: undefined,
     waitingTime: 0,
     originalBurst: p.burst
   }));
@@ -26,6 +27,7 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
         return;
       }
       if (CPU.running === p) {
+        p.responseTime ??= p.waitingTime;
         execRecord[i].push(PROC.RUNNING);
         return;
       }
@@ -95,11 +97,14 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
 
   execRecord.forEach(rec => rec.push(PROC.AFTER_EXEC));
 
-
-  const averageWaitingTime = processes.reduce((rec, {waitingTime}) => rec + waitingTime, 0) / processes.length;
-
+  const responseTime = processes.reduce((rec, {responseTime}) => rec + responseTime, 0) / processes.length;
+  const waitingTime = processes.reduce((rec, {waitingTime}) => rec + waitingTime, 0) / processes.length;
+  const turnaround = processes.reduce((rec, {originalBurst, waitingTime}) => rec + originalBurst + waitingTime, 0) / processes.length;
+  
   return {
     execRecord,
-    averageWaitingTime
+    responseTime,
+    waitingTime,
+    turnaround,
   };
 }
