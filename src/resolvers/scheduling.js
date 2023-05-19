@@ -2,8 +2,11 @@ import { PROC } from '../constants';
 
 export function resolver({ processes, quantum, type = 'FCFS' }) {
 
-  if (type === 'SJF')
-    processes = processes.map(p => ({...p, originalBurst: p.burst}));
+  processes = processes.map(p => ({
+    ...p,
+    waitingTime: 0,
+    originalBurst: p.burst
+  }));
 
   quantum = !quantum ? Infinity : quantum;
   
@@ -31,6 +34,7 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
         return;
       }
       execRecord[i].push(PROC.WAITING);
+      p.waitingTime++;
     });
   }
 
@@ -95,9 +99,11 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
 
   execRecord.forEach(rec => rec.push(PROC.AFTER_EXEC));
 
+
+  const averageWaitingTime = processes.reduce((rec, {waitingTime}) => rec + waitingTime, 0) / processes.length;
+
   return {
     execRecord,
-    processes,
-    quantum
+    averageWaitingTime
   };
 }
