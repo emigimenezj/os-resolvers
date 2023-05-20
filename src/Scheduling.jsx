@@ -65,8 +65,25 @@ export function Scheduling() {
   const [quantum, setQuantum] = useState('');
   const [solutions, setSolutions] = useState([]);
 
-  const handleChangeProcessesInput = (event) =>
-    setProcesses(Array.from(Array(~~event.target.value), () => ({...emptyProcess})));
+  const handleChangeProcessesInput = (event) => {
+          
+    const { value } = event.target;
+
+    setProcesses(prevProcesses => {
+      Array.from(Array(~~event.target.value), () => ({...emptyProcess}))
+
+      const newProcesses = [...prevProcesses]
+      const prevLength = prevProcesses.length;
+      if (prevLength < value) {
+        newProcesses.concat(Array.from(~~value, () => ({...emptyProcess})));
+      } else {
+        newProcesses.splice(-value);
+      }
+
+      return newProcesses;
+    });
+  }
+    
   
   const onTableChange = (event) => {
     const { name, value } = event.target;
