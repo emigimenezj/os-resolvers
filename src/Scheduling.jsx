@@ -153,9 +153,35 @@ export function Scheduling() {
                 processes.map((p, i) => (
                   <tr key={i}>
                     <td>P{i+1}</td>
-                    <td><input onChange={onTableChange} name={`${i}-burst`} value={p.burst}/></td>
-                    <td><input onChange={onTableChange} name={`${i}-arrival`} value={p.arrival?p.arrival:''} placeholder='0'/></td>
-                    <td><input onChange={onTableChange} name={`${i}-priority`} value={p.priority?p.priority:''} placeholder='0'/></td>
+                    <td>
+                      <input
+                        type="text"
+                        onChange={onTableChange}
+                        name={`${i}-burst`}
+                        value={p.burst ? p.burst : '' }
+                        placeholder="0"
+                      />
+                    </td>
+                    <td>
+                      <input 
+                        type="text"
+                        disabled={!p.burst}
+                        onChange={onTableChange}
+                        name={`${i}-arrival`}
+                        value={ p.arrival ? p.arrival : '' }
+                        placeholder="0"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        disabled={!p.burst}
+                        onChange={onTableChange}
+                        name={`${i}-priority`}
+                        value={ p.priority ? p.priority : '' }
+                        placeholder="0"
+                      />
+                    </td>
                   </tr>
                 ))
               }
