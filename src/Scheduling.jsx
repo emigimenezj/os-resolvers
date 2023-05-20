@@ -69,10 +69,15 @@ export function Scheduling() {
     setProcesses(Array.from(Array(~~event.target.value), () => ({...emptyProcess})));
   
   const onTableChange = (event) => {
-    const [i, prop] = event.target.name.split('-');
+    const { name, value } = event.target;
+    
+    const isOnlyDigits = /^\d*$/.test(value);
+    if (!isOnlyDigits) return;
+
     setProcesses(prev => {
       const newProc = [...prev];
-      newProc[i][prop] = parseInt(event.target.value, 10);
+      const [i, prop] = name.split('-');
+      newProc[i][prop] = value ? parseInt(value, 10) : 0;
       return newProc;
     });
   }
