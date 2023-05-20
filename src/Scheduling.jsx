@@ -70,16 +70,14 @@ export function Scheduling() {
     const { value } = event.target;
 
     setProcesses(prevProcesses => {
-      Array.from(Array(~~event.target.value), () => ({...emptyProcess}))
 
       const newProcesses = [...prevProcesses]
-      const prevLength = prevProcesses.length;
-      if (prevLength < value) {
-        newProcesses.concat(Array.from(~~value, () => ({...emptyProcess})));
-      } else {
-        newProcesses.splice(-value);
-      }
+      const relativeLength = value - prevProcesses.length;
 
+      relativeLength < 0
+        ? newProcesses.splice(-1)
+        : newProcesses.push({...emptyProcess});
+      
       return newProcesses;
     });
   }
