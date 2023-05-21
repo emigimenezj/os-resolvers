@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import { SchedulingCarouselSolutions } from './components/SchedulingCarouselSolutions';
 import { resolver } from './resolvers/scheduling';
-import { PROC } from './constants';
 
 import './styles/scheduling.css';
 
