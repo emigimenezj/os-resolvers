@@ -5,58 +5,6 @@ import { resolver } from './resolvers/scheduling';
 
 import './styles/scheduling.css';
 
-const SLOT_TYPE = {
-  [PROC.AFTER_EXEC]: 'sched-sol-after-exec',
-  [PROC.BEFORE_EXEC]: 'sched-sol-before-exec',
-  [PROC.WAITING]: 'sched-sol-waiting',
-  [PROC.RUNNING]: 'sched-sol-running'
-}
-
-export function SchedulingCarouselSolutions({ solutions }) {
-  return (
-    <div className="carousel-solutions-container">
-      {
-        solutions.map((sol, index) => {
-          return (
-            <div key={index} className="solutioncontainer">
-              <table>
-                <thead>
-                  <tr>
-                    {sol.execRecord.map((_, i) => <th key={i}>{`P${i+1}`}</th>)}
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    sol.execRecord.map((rec, i) => {
-                      return (
-                        <tr key={i} className="sched-sol-row">
-                          {
-                            rec.map((slot, j) => {
-                              return (
-                                <td key={j} className={`sched-sol-slot ${SLOT_TYPE[slot]}`}></td>
-                              );
-                            })
-                          }
-                        </tr>
-                      );
-                    })
-                  }
-                  <tr className="sched-sol-ms-row">
-                    {sol.execRecord[0].map((_, i) => <td key={i}>{i}</td>)}
-                  </tr>
-                </tbody>
-              </table>
-              <p>Average response time: {sol.responseTime}</p>
-              <p>Average waiting time: {sol.waitingTime}</p>
-              <p>Average turnaround time: {sol.turnaround}</p>
-            </div>
-          );
-        })
-      }
-    </div>
-  )
-}
-
 export function Scheduling() {
 
   const emptyProcess = { burst: 0, arrival: 0, priority: 0 };
@@ -66,12 +14,10 @@ export function Scheduling() {
   const [solutions, setSolutions] = useState([]);
 
   const handleChangeProcessesInput = (event) => {
-          
     const { value } = event.target;
 
     setProcesses(prevProcesses => {
-
-      const newProcesses = [...prevProcesses]
+      const newProcesses = [...prevProcesses];
       const relativeLength = value - prevProcesses.length;
 
       relativeLength < 0
@@ -84,6 +30,7 @@ export function Scheduling() {
     
   
   const onTableChange = (event) => {
+    console.log(event);
     const { name, value } = event.target;
     
     const isOnlyDigits = /^\d*$/.test(value);
@@ -97,7 +44,15 @@ export function Scheduling() {
     });
   }
 
-  const handleQuantumInput = (event) => setQuantum(parseInt(event.target.value, 10))
+  const handleQuantumInput = (event) => {
+
+    const { value } = event.target;
+
+    const isOnlyDigits = /^\d*$/.test(value);
+    if (!isOnlyDigits) return;
+
+    setQuantum(value ? parseInt(event.target.value, 10) : 0);
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -112,7 +67,7 @@ export function Scheduling() {
 
   /*
   TODO:
-  - [ ]Validar las actualizaciones de los inputs de scheduling (burst, arrive, priority and quantum)
+  - [ ] Validar las actualizaciones de los inputs de scheduling (burst, arrive, priority and quantum)
   (OBS) Cuando se pone un valor y se borra, se envía <empty string> como valor de input, eso rompe el algoritmo y queda en while(true)
   - [+-] Agregar soporte para manejo de prioridades que sea compatible con desalojo por quantums
   - [ ] Averiguar lo de colas multi-nivel y multi-nivel con feedback
@@ -152,7 +107,7 @@ export function Scheduling() {
             name="preemptive"
             placeholder="0"
             onChange={handleQuantumInput}
-            value={quantum}
+            value={ quantum ? quantum : '' }
           />
           <table>
             <thead>
@@ -167,13 +122,13 @@ export function Scheduling() {
               {
                 processes.map((p, i) => (
                   <tr key={i}>
-                    <td>P{i+1}</td>
+                    <th>P{i+1}</th>
                     <td>
                       <input
                         type="text"
                         onChange={onTableChange}
                         name={`${i}-burst`}
-                        value={p.burst ? p.burst : '' }
+                        value={ p.burst ? p.burst : '' }
                         placeholder="0"
                       />
                     </td>

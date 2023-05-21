@@ -72,6 +72,11 @@
   vertical-align: middle;
 }
 
+.sched-sol-table {
+  width: 100vw;
+  overflow-x: auto;
+}
+
 .mem-sol-slot:first-child {
   border: none;
   border-radius: 10px;
