@@ -96,15 +96,10 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
   }
 
   execRecord.forEach(rec => rec.push(PROC.AFTER_EXEC));
-
-  const responseTime = processes.reduce((rec, {responseTime}) => rec + responseTime, 0) / processes.length;
-  const waitingTime = processes.reduce((rec, {waitingTime}) => rec + waitingTime, 0) / processes.length;
-  const turnaround = processes.reduce((rec, {originalBurst, waitingTime}) => rec + originalBurst + waitingTime, 0) / processes.length;
   
   return {
     execRecord,
-    responseTime,
-    waitingTime,
-    turnaround,
+    processes,
+    quantum
   };
 }
