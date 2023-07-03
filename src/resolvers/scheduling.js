@@ -1,6 +1,7 @@
 import { PROC } from '../constants';
 
-export function resolver({ processes, quantum, type = 'FCFS' }) {
+export function resolver({ processes, quantum, type = 'FCFS', preemptive }) {
+  console.log(preemptive);
 
   processes = processes.map(p => ({
     ...p,
@@ -10,6 +11,7 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
   }));
 
   quantum = !quantum ? Infinity : quantum;
+  const isPreemptive = preemptive === "preemptive"
   
   const execRecord = Array.from(Array(processes.length), () => []);
 
@@ -78,6 +80,18 @@ export function resolver({ processes, quantum, type = 'FCFS' }) {
 
       //*** SELECTION CRITERIA ***//
       ALGORITHM[type]();
+
+    } else if (isPreemptive && arrivalProcs.length){
+      const tmp_running = CPU.running;
+      const tmp_quantum = CPU.quantum;
+      CPU.ready.push(CPU.running);
+      CPU.running = null;
+
+      //*** SELECTION CRITERIA ***//
+      ALGORITHM[type]();
+
+      if (CPU.running === tmp_running) CPU.quantum = tmp_quantum;
+      console.log("check", CPU.running, CPU.quantum);
     }
 
     recording();

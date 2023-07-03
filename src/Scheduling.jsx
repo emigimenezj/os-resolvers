@@ -58,7 +58,12 @@ export function Scheduling() {
     event.preventDefault();
 
     const copyProcesses = [...processes].map(p => ({...p}));
-    const sol = resolver({processes: copyProcesses, quantum, type: event.target.algorithm.value });
+    const sol = resolver({
+      processes: copyProcesses,
+      quantum,
+      type: event.target.algorithm.value,
+      preemptive: event.target.preemptive.value
+    });
 
     setSolutions(prev => [...prev, sol]);
 
@@ -87,6 +92,12 @@ export function Scheduling() {
             <option value="SC">Multilevel Queue</option>
           </select>
           <br />
+          <label htmlFor="sched-preemptive">Tipo de algoritmo:</label>
+          <select id="sched-preemptive" className="select" name="preemptive" defaultValue="non-preemptive">
+            <option value="non-preemptive">Non-Preemptive</option>
+            <option value="preemptive">Preemptive</option>
+          </select>
+          <br />
           <label htmlFor="scheduling-form-input-processes">Cantidad de procesos:</label><br/>
           <input
             id="scheduling-form-input-processes"
@@ -99,12 +110,12 @@ export function Scheduling() {
             onChange={handleChangeProcessesInput}
           /> {processes.length}
           <br />
-          <label htmlFor="scheduling-form-input-preemptive">
+          <label htmlFor="scheduling-form-input-quantum">
             Quantum: 
           </label>
           <input
-            id="scheduling-form-input-preemptive"
-            name="preemptive"
+            id="scheduling-form-input-quantum"
+            name="quantum"
             placeholder="0"
             onChange={handleQuantumInput}
             value={ quantum ? quantum : '' }
