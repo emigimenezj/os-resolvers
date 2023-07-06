@@ -41,7 +41,7 @@ export function SchedulingCarouselSolutions({ solutions }) {
                 {
                   quantum === Infinity
                     ? ''
-                    : <span>Quantum: {quantum}</span>
+                    : <span>Quantum: {quantum} </span>
                 }
                 <span>Average times:</span>
                 <span> RESPONSE = {responseTimeFrac} ~ ({responseTimeDec})</span>
@@ -69,7 +69,7 @@ export function SchedulingCarouselSolutions({ solutions }) {
                     }
                     <tr className="sched-sol-ms-row">
                       <td></td>
-                      {Array.from({length: length+1}).map((_, i) => <td key={i}>{i}</td>)}
+                      {Array.from({length}).map((_, i) => <td key={i}>{i}</td>)}
                     </tr>
                   </tbody>
                 </table>
