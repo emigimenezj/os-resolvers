@@ -6,8 +6,3 @@ label {
   display: flex;
   flex-direction: column;
 }
-
-.sched-sol-ms-row {
-  padding-left: 50px;
-  text-align: right;
-}

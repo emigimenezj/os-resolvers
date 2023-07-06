@@ -94,7 +94,7 @@ export function Scheduling() {
   return (
     <main>
       <header>
-        <h1> Scheduling ! </h1>
+        <h1> Scheduling !</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="sched-algorithm">Tipo de algoritmo:</label>
           <select id="sched-algorithm" className="select" name="algorithm" defaultValue="FCFS" onChange={handleAlgorithmSeleccionChange}>

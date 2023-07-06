@@ -68,6 +68,7 @@ export function SchedulingCarouselSolutions({ solutions }) {
                       })
                     }
                     <tr className="sched-sol-ms-row">
+                      <td></td>
                       {Array.from({length: length+1}).map((_, i) => <td key={i}>{i}</td>)}
                     </tr>
                   </tbody>
