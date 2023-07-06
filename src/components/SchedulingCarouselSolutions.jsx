@@ -44,9 +44,9 @@ export function SchedulingCarouselSolutions({ solutions }) {
                     : <span>Quantum: {quantum}</span>
                 }
                 <span>Average times:</span>
-                <span>RESPONSE = {responseTimeFrac} ~ ({responseTimeDec})</span>
-                <span>WAITING = {waitingTimeFrac} ~ ({waitingTimeDec})</span>
-                <span>RESPONSE = {turnaroundFrac} ~ ({turnaroundDec})</span>
+                <span> RESPONSE = {responseTimeFrac} ~ ({responseTimeDec})</span>
+                <span> WAITING = {waitingTimeFrac} ~ ({waitingTimeDec})</span>
+                <span> TURNAROUND = {turnaroundFrac} ~ ({turnaroundDec})</span>
               </div>
               <div className="sched-sol-table">
                 <table>

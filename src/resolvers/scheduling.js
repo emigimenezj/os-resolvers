@@ -1,7 +1,6 @@
 import { PROC } from '../constants';
 
 export function resolver({ processes, quantum, type = 'FCFS', preemptive }) {
-  console.log(preemptive);
 
   processes = processes.map(p => ({
     ...p,
@@ -51,10 +50,37 @@ export function resolver({ processes, quantum, type = 'FCFS', preemptive }) {
       CPU.running = next;
       CPU.quantum = quantum;
     },
+    RR: () => {
+      const highestPriorityPresent = Math.min(...CPU.ready.map(p => p.priority));
+      const index = CPU.ready.findIndex(p => p.priority === highestPriorityPresent);
+
+      const [next] = CPU.ready.splice(index, 1);
+      CPU.running = next;
+      CPU.quantum = quantum;
+    },
+    Priority: () => {
+      const highestPriorityPresent = Math.min(...CPU.ready.map(p => p.priority));
+      const index = CPU.ready.findIndex(p => p.priority === highestPriorityPresent);
+
+      const [next] = CPU.ready.splice(index, 1);
+      CPU.running = next;
+      CPU.quantum = quantum;
+    },
     SJF: () => {
       const { index } = CPU.ready.reduce((rec, p, index) => {
           if (p.priority < rec.priority) return {...p, index};
           if (p.originalBurst < rec.originalBurst) return {...p, index};
+          return rec;
+      }, {priority: Infinity, originalBurst: Infinity});
+
+      const [next] = CPU.ready.splice(index, 1);
+      CPU.running = next;
+      CPU.quantum = quantum;
+    },
+    SRT: () => {
+      const { index } = CPU.ready.reduce((rec, p, index) => {
+          if (p.priority < rec.priority) return {...p, index};
+          if (p.burst < rec.burst) return {...p, index};
           return rec;
       }, {priority: Infinity, originalBurst: Infinity});
 
@@ -81,7 +107,8 @@ export function resolver({ processes, quantum, type = 'FCFS', preemptive }) {
       //*** SELECTION CRITERIA ***//
       ALGORITHM[type]();
 
-    } else if (isPreemptive && arrivalProcs.length){
+    } else if (type === 'SRT' && arrivalProcs.length){
+
       const tmp_running = CPU.running;
       const tmp_quantum = CPU.quantum;
       CPU.ready.push(CPU.running);
@@ -91,7 +118,17 @@ export function resolver({ processes, quantum, type = 'FCFS', preemptive }) {
       ALGORITHM[type]();
 
       if (CPU.running === tmp_running) CPU.quantum = tmp_quantum;
-      console.log("check", CPU.running, CPU.quantum);
+      
+    } else if (type === 'Priority' && isPreemptive && arrivalProcs.length) {
+      const tmp_running = CPU.running;
+      const tmp_quantum = CPU.quantum;
+      CPU.ready.push(CPU.running);
+      CPU.running = null;
+
+      //*** SELECTION CRITERIA ***//
+      ALGORITHM[type]();
+
+      if (CPU.running === tmp_running) CPU.quantum = tmp_quantum;
     }
 
     recording();
