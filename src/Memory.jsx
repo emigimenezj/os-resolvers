@@ -43,7 +43,7 @@ export function Memory() {
   return (
     <main>
       <header>
-        <h1>Memory!</h1>
+        <h1>Memory !</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="mem-algorithm">Tipo de algoritmo:</label>
           <select id="mem-algorithm" className="select" name="algorithm" defaultValue="FIFO">
